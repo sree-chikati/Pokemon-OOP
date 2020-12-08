@@ -65,7 +65,7 @@ class Battle:
 
     def build_team_one(self):
         team_name = input("What is the name of the first team? ")
-        self.team_two = Team(team_name, 'Water', ['Water Gun', 'Bubblebeam', 'Hydro Pump', 'Surf'],{'ATTACK': 10, 'DEFENSE':10})
+        self.team_one = Team(team_name, 'Water', ['Water Gun', 'Bubblebeam', 'Hydro Pump', 'Surf'],{'ATTACK': 10, 'DEFENSE':10})
         self.create_trainer()
 
         for i in range(1):
