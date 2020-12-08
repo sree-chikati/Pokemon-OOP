@@ -1,152 +1,104 @@
-import time
-import numpy as np
-import sys
+from move import Move
+from item import Item
+from potion import Potion
+from pokemon import Pokemon
+from team import Team
+from trainer import Trainer
+
+class Battle:
+    def __init__(self):
+        self.team_one: None
+        self.team_two: None
+    
+    def create_move(self):
+        move_add = input("[1] Fire moves\n[2] Water moves[3] Grass moves\n\nYour choice:   ")
+        if move_add == "1":
+            name = 'Flamethrower', 'Fly', 'Blast Burn', 'Fire Punch'
+        elif move_add == "2":
+            name = 'Water Gun', 'Bubblebeam', 'Hydro Pump', 'Surf'
+        elif move_add == "3":
+            name = 'Vine Wip', 'Razor Leaf', 'Earthquake', 'Frenzy Plant'
+        max_damage = input(
+            "What is the max damage of the move?  ")
+
+        return Move(name, max_damage)
+    
+    def create_item(self):
+        name = input("What is the item's name?  ")
+        max_damage = input(
+            "What is the max damage of the item?  ")
+    
+        return Item(name, max_damage)
+    
+    def create_potion(self):
+        name = input("What is the potion's name?  ")
+        max_defense = input(
+            "What is the max defense of the potion?  ")
+    
+        return Potion(name, max_defense)
+    
+    def create_pokemon(self):
+        poke_name = input("Enter Pokemon's name: ")
+        pokemon = Pokemon(poke_name)
+        add_choice = None
+        while add_choice != "3":
+           add_choice = input("[1] Add move\n[2] Add item\n[3] Done adding items\n\nYour choice: ")
+           if add_choice == "1":
+               move = self.create_move()
+               pokemon.add_move(move)
+           elif add_choice == "2":
+               item = self.create_item()
+               pokemon.add_item(item)
+        return pokemon
+    
+    def create_trainer(self):
+        trainer_name = input("\nTrainer: ")
+        trainer_pokemon = input("Main Pokemon\n Options are Kanto starters (Charmander, Squirtle, Bulbasaur): ")
+        num_potions = int(input("Ammoount of Potions: "))
+        trainer = Trainer(trainer_name, trainer_pokemon, num_potions)
+        return trainer
 
 
-def delay_print(s):
-    for c in s:
-        sys.stdout.write(c)
-        sys.stdout.flush()
-        time.sleep(0.05)
+    def build_team_one(self):
+        team_name = input("What is the name of the first team? ")
+        self.team_two = Team(team_name, 'Water', ['Water Gun', 'Bubblebeam', 'Hydro Pump', 'Surf'],{'ATTACK': 10, 'DEFENSE':10})
+        self.create_trainer()
 
-class Pokemon:
-    def __init__(self, name, types, moves, EVs, health='==================='):
-        # Guardar variables como atributos
-        self.name = name
-        self.types = types
-        self.moves = moves
-        self.attack = EVs['ATTACK']
-        self.defense = EVs['DEFENSE']
-        self.health = health
-        # Definir número de barras de vida
-        self.bars = 20 
+        for i in range(1):
+            pokemon = self.create_pokemon()
+            self.team_one.add_pokemon(pokemon)
 
+    def build_team_two(self):
+        team_name = input("What is the name of the second team? ")
+        self.team_two = Team(team_name, 'Fire', ['Ember', 'Scratch', 'Tackle', 'Fire Punch'],{'ATTACK':8, 'DEFENSE':12})
+        self.create_trainer()
 
-    def fight(self, Pokemon2):
-        # Permiso para que dos Pokémon combatan
-
-        # Texto de la pelea
-        print("-----POKEMONE BATTLE-----")
-        print("Pokemon 1:", self.name)
-        print("TYPE/", self.types)
-        print("ATTACK/", self.attack)
-        print("DEFENSE/", self.defense)
-        print("LVL/", 3*(1+np.mean([self.attack,self.defense])))
-        print("\nVS")
-        print("Pokemon 2:", Pokemon2.name)
-        print("TYPE/", Pokemon2.types)
-        print("ATTACK/", Pokemon2.attack)
-        print("DEFENSE/", Pokemon2.defense)
-        print("LVL/", 3*(1+np.mean([Pokemon2.attack,Pokemon2.defense])))
-
-        time.sleep(2)
-
-        # Ventajas de tipo
-        version = ['Fire', 'Water', 'Grass']
-        for i,k in enumerate(version):
-            if self.types == k:
-                # Cuando son del mismo tipo
-                if Pokemon2.types == k:
-                    string_1_attack = '\nIts not very effective...'
-                    string_2_attack = '\nIts not very effective...'
-
-                # Cuando el Pokémon2 es superior
-                if Pokemon2.types == version[(i+1)%3]:
-                    Pokemon2.attack *= 2
-                    Pokemon2.defense *= 2
-                    self.attack /= 2
-                    self.defense /= 2
-                    string_1_attack = '\nIts not very effective...'
-                    string_2_attack = '\nIts super effective!'
-
-                # Cuando el Pokémon2 es inferior
-                if Pokemon2.types == version[(i+2)%3]:
-                    self.attack *= 2
-                    self.defense *= 2
-                    Pokemon2.attack /= 2
-                    Pokemon2.defense /= 2
-                    string_1_attack = '\nIts super effective!'
-                    string_2_attack = '\nIts not very effective...'
+        for i in range(1):
+            pokemon = self.create_pokemon()
+            self.team_two.add_pokemon(pokemon)
+    
+    def team_battle(self):
+        self.team_one.fight(self.team_two)
+    
+    
 
 
-        
-        # Bucle while mientras tengan vida cada Pokémon
-        while (self.bars > 0) and (Pokemon2.bars > 0):
-            # Imprimir la vida de cada Pokémon
-            print(self.name ,"health:", self.health)
-            print(Pokemon2.name ,"health:", Pokemon2.health)
+if __name__ == "__main__":
+    game_is_running = True
+    battle = Battle()
+    
+    print("Welcome to the Pokemon Gym Battle! Please Register your team first so we can get started!")
+    battle.build_team_one()
+    battle.build_team_two()
 
-            print("Go", {self.name}, "!")
-            for i, x in enumerate(self.moves):
-                print(i+1, x)
-            index = int(input('Pick a move: '))
-            print(self.name ,"used", self.moves[index-1])
-            time.sleep(1)
-            delay_print(string_1_attack)
+    while game_is_running:
 
-            # Determinar cuanto daño hacer
-            Pokemon2.bars -= self.attack
-            Pokemon2.health = ""
+        battle.team_battle()
+        play_again = input("Play Again? Y or N: ")
 
-            # Añadir barras en plus de defensa
-            for j in range(int(Pokemon2.bars+.1*Pokemon2.defense)):
-                Pokemon2.health += "="
+        if play_again.lower() == "n":
+            print("Thank you for joining us in battle! That was an exciting match!")
+            game_is_running = False
 
-            time.sleep(1)
-            print(self.name ,"health:", self.health)
-            print(Pokemon2.name ,"health:", Pokemon2.health)
-            time.sleep(.5)
-
-            # Verificar si el Pokémon 'fainted'
-            if Pokemon2.bars <= 0:
-                delay_print("\n..." + Pokemon2.name + ' fainted.')
-                break
-
-            # Turno del segundo Pokémon
-            print("Go",  Pokemon2.name, "!")
-            for i, x in enumerate(Pokemon2.moves):
-                print(i+1, x)
-            index = int(input('Pick a move: '))
-            print(Pokemon2.name ,"used", Pokemon2.moves[index-1])
-            time.sleep(1)
-            delay_print(string_2_attack)
-
-            # Determinar daño
-            self.bars -= Pokemon2.attack
-            self.health = ""
-
-            # Añadir barras en plus de defensa
-            for j in range(int(self.bars+.1*self.defense)):
-                self.health += "="
-
-            time.sleep(1)
-            print(self.name ,"health:", self.health)
-            print(Pokemon2.name ,"health:", Pokemon2.health)
-            time.sleep(.5)
-
-            # Verificar si el Pokémon 'fainted'
-            if self.bars <= 0:
-                delay_print("\n..." + self.name + ' fainted.')
-                break
-
-
-
-
-
-
-if __name__ == '__main__':
-    # Creamos cada Pokémon
-    Charizard = Pokemon('Charizard', 'Fire', ['Flamethrower', 'Fly', 'Blast Burn', 'Fire Punch'], {'ATTACK':12, 'DEFENSE': 8})
-    Blastoise = Pokemon('Blastoise', 'Water', ['Water Gun', 'Bubblebeam', 'Hydro Pump', 'Surf'],{'ATTACK': 10, 'DEFENSE':10})
-    Venusaur = Pokemon('Venusaur', 'Grass', ['Vine Wip', 'Razor Leaf', 'Earthquake', 'Frenzy Plant'],{'ATTACK':8, 'DEFENSE':12})
-
-    Charmander = Pokemon('Charmander', 'Fire', ['Ember', 'Scratch', 'Tackle', 'Fire Punch'],{'ATTACK':4, 'DEFENSE':2})
-    Squirtle = Pokemon('Squirtle', 'Water', ['Bubblebeam', 'Tackle', 'Headbutt', 'Surf'],{'ATTACK': 3, 'DEFENSE':3})
-    Bulbasaur = Pokemon('Bulbasaur', 'Grass', ['Vine Wip', 'Razor Leaf', 'Tackle', 'Leech Seed'],{'ATTACK':2, 'DEFENSE':4})
-
-    Charmeleon = Pokemon('Charmeleon', 'Fire', ['Ember', 'Scratch', 'Flamethrower', 'Fire Punch'],{'ATTACK':6, 'DEFENSE':5})
-    Wartortle = Pokemon('Wartortle', 'Water', ['Bubblebeam', 'Water Gun', 'Headbutt', 'Surf'],{'ATTACK': 5, 'DEFENSE':5})
-    Ivysaur = Pokemon('Ivysaur\t', 'Grass', ['Vine Wip', 'Razor Leaf', 'Bullet Seed', 'Leech Seed'],{'ATTACK':4, 'DEFENSE':6})
-
-
-    Charizard.fight(Blastoise) # Empezar batalla
+        else:
+            battle.team_battle()

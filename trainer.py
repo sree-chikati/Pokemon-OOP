@@ -5,7 +5,6 @@ class Trainer:
     self.potions = potions
   
   def trainer_info(self):
-    #return "Trainer info. {name}, has pokemons: {pokemons}, has {potions} potions, current pokemon is {current_pokemon}.".format(name = self.name, pokemons = self.pokemons, potions = self.potions, current_pokemon = self.current_pokemon)
     return f"\nTrainer info:\n name: {self.name}\n Pokemons: {self.pokemon}\n Type: {self.potions}\n"
   
   def use_potion(self):
