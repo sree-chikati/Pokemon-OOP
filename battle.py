@@ -5,6 +5,8 @@ from pokemon import Pokemon
 from team import Team
 from trainer import Trainer
 
+
+#All classes are public since all methods and attributes need to be displayed in the Pokemon Battle
 class Battle:
     def __init__(self):
         self.team_one: None
@@ -39,6 +41,7 @@ class Battle:
     
     def create_pokemon(self):
         poke_name = input("Enter Pokemon's name: ")
+        #One class demonstrates composition (being composed of other objects)
         pokemon = Pokemon(poke_name)
         add_choice = None
         while add_choice != "3":
@@ -55,6 +58,7 @@ class Battle:
         trainer_name = input("\nTrainer: ")
         trainer_pokemon = input("Main Pokemon\n Options are Kanto starters (Charmander, Squirtle, Bulbasaur): ")
         num_potions = int(input("Ammoount of Potions: "))
+        #One class demonstrates composition (being composed of other objects)
         trainer = Trainer(trainer_name, trainer_pokemon, num_potions)
         return trainer
 
@@ -85,6 +89,7 @@ class Battle:
 
 if __name__ == "__main__":
     game_is_running = True
+    #All classes are used to instatiate battle objects
     battle = Battle()
     
     print("Welcome to the Pokemon Gym Battle! Please Register your team first so we can get started!")
@@ -102,3 +107,24 @@ if __name__ == "__main__":
 
         else:
             battle.team_battle()
+
+# Requirements: 
+# Classes:
+
+# At least 4 classes are defined.
+# At least 1 class demonstrates composition (being composed of other objects).
+# At least 1 class inherits from another class.
+# All classes are used to instantiate example objects.
+# Methods:
+
+# Each class has at least 2 methods that use and/or modify class attributes.
+# The subclass overrides at least one superclass method (this can be init or another method).
+# Rationale about which methods are private, protected, or public should be provided in code comments or verbally during presentation.
+# Attributes:
+
+# Each class has a least 2 instance attributes created in init()
+# Rationale about which attributes are private, protected, or public should be provided in code comments or verbally during presentation.
+# Diagram:
+
+# A diagram is provided that shows an overview of all the classes that make up the system design
+# Diagram shows relationships between classes.

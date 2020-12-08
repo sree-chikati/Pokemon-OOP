@@ -38,6 +38,7 @@ class Team:
             pokemon.current_health = pokemon.starting_health
             print(f"{pokemon.name} is revived.")
     
+    #
     def fight(self, other_team):
         for pokemon in self.pokemons: 
             self.name = pokemon.name

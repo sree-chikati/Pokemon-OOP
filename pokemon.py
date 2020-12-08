@@ -11,8 +11,6 @@ class Pokemon:
          self.starting_health = starting_health
          self.current_health = starting_health
          self.alive_status = True
-         self.deaths = 0
-         self.kills = 0
     
      def add_move(self, move):
         self.moves.append(move)
